@@ -13,15 +13,25 @@ router.get("/", async (req, res) => {
   res.status(200).json(data);
 });
 
-// router.patch("/:id", async(req, res) => {
-//     const {id} = req.params
-//     const user = await User.findById(id)
-//     const upadated = await user.updateOne()
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findById(id);
+    res.status(200).send(user);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+router.patch("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await User.updateOne({ _id: id }, { $set: { username: req.body.username } });
+    res.send("updated");
+  } catch (error) {
+    console.error(error);
+  }
+});
 
-// });
-// router.get("/:id", passport.authenticate("local"), (req, res) => {
-//   res.send(200);
-//   console.log("Success");
-// });
 
 module.exports = router;
